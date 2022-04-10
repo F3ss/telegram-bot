@@ -9,7 +9,7 @@ var ListOfProduct []ProductDto = []ProductDto{
 }
 
 type ProductDto struct {
-	title string
+	Title string
 }
 
 func NewProductDto() *ProductDto {

@@ -4,7 +4,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/f3ss/telegram-bot/internal/service/product_service"
+	"github.com/f3ss/telegram-bot/internal/app/commands"
+	"github.com/f3ss/telegram-bot/internal/service"
+
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/joho/godotenv"
 )
@@ -25,36 +27,20 @@ func main() {
 	u.Timeout = 60
 
 	updates := bot.GetUpdatesChan(u)
-
+	productService := service.NewProductService()
+	commander := commands.NewCommander(bot, productService)
 	for update := range updates {
 		if update.Message == nil {
 			continue
 		}
 
-		productService := product_service.NewProductService()
-
 		switch update.Message.Command() {
 		case "help":
-			helpComandResponse(bot, update.Message)
+			commander.Help(update.Message)
 		case "list":
-			listOfProductResponse(bot, update.Message)
+			commander.List(update.Message)
 		default:
-			defaultResponse(bot, update.Message)
+			commander.DefaultResponse(update.Message)
 		}
 	}
-}
-
-func helpComandResponse(bot *tgbotapi.BotAPI, inputMsg *tgbotapi.Message) {
-	log.Printf("{%d} %s", inputMsg.From.ID, inputMsg.Text)
-	bot.Send(tgbotapi.NewMessage(inputMsg.From.ID, "/help\n/list"))
-}
-
-func listOfProductResponse(bot *tgbotapi.BotAPI, inputMsg *tgbotapi.Message) {
-	log.Printf("{%d} %s", inputMsg.From.ID, inputMsg.Text)
-	bot.Send(tgbotapi.NewMessage(inputMsg.From.ID, "You wroteqqeqe: "+inputMsg.Text))
-}
-
-func defaultResponse(bot *tgbotapi.BotAPI, inputMsg *tgbotapi.Message) {
-	log.Printf("{%d} %s", inputMsg.From.ID, inputMsg.Text)
-	bot.Send(tgbotapi.NewMessage(inputMsg.From.ID, "You wrote: "+inputMsg.Text))
 }
