@@ -8,5 +8,5 @@ import (
 
 func (c *Commander) Help(inputMsg *tgbotapi.Message) {
 	log.Printf("{%d} %s", inputMsg.From.ID, inputMsg.Text)
-	c.bot.Send(tgbotapi.NewMessage(inputMsg.From.ID, "/help\n/list"))
+	c.bot.Send(tgbotapi.NewMessage(inputMsg.From.ID, "/help\n/list\n/get"))
 }

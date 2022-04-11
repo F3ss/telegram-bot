@@ -1,4 +1,4 @@
-package service
+package models
 
 var ListOfProduct []ProductDto = []ProductDto{
 	{"One"},
